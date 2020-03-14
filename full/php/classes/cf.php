@@ -16,11 +16,9 @@
         }
         //Calculates the hosting folder
         private function rDCalc() {
-            $rel_DIR = str_replace('\\','/',dirname(__DIR__,2)/*MUST point to root*/);
-            $rel_ROOT = explode('/', $rel_DIR);
+            $rel_ROOT = explode('/', str_replace('\\','/',dirname(__DIR__,2)/*MUST point to rel root*/));
             $abs_ROOT = explode('/' , $_SERVER['DOCUMENT_ROOT']);
-            $rootDiff = implode(array_values(array_diff($rel_ROOT, $abs_ROOT)),'/');
-            ($rel_ROOT !== $abs_ROOT) ? $this->rD = '/' . $rootDiff : $this->rD ='';
+            ($rel_ROOT !== $abs_ROOT) ? $this->rD = '/' . implode(array_values(array_diff($rel_ROOT, $abs_ROOT)),'/') : $this->rD ='';
         }
         
     }
