@@ -6,7 +6,6 @@
             $this->redirect = $_SERVER['REQUEST_URI'];
             $this->rD = ''; //Set directory here if not using getRD
             $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
-            $this->sep = '';
             ////Google Recaptcha keys local for testing
             $this->gcSecret = 'google-secret-key';
             $this->gcSite = 'google-site-key';
@@ -17,11 +16,11 @@
         }
         //Calculates the hosting folder
         private function rDCalc() {
-            if(strpos(strtolower($this->userAgent), 'win') !== false) $this->sep = '\\'; else $this->sep = '/';
-            $rel_ROOT = explode($this->sep, dirname(__DIR__,2)/*MUST point to root*/);
+            $rel_DIR = str_replace('\\','/',dirname(__DIR__,2)/*MUST point to root*/);
+            $rel_ROOT = explode('/', $rel_DIR);
             $abs_ROOT = explode('/' , $_SERVER['DOCUMENT_ROOT']);
-            $rootDiff = array_values(array_diff($rel_ROOT, $abs_ROOT));
-            ($rel_ROOT !== $abs_ROOT) ? $this->rD = '/' . $rootDiff[0] : $this->rD ='';
+            $rootDiff = implode(array_values(array_diff($rel_ROOT, $abs_ROOT)),'/');
+            ($rel_ROOT !== $abs_ROOT) ? $this->rD = '/' . $rootDiff : $this->rD ='';
         }
         
     }
