@@ -1,9 +1,14 @@
+@import "navbar.css";
+@import "forms.css";
+@import "home.css";
 :root {
   --white: rgba(255, 255, 255, 1);
   --black: rgba(0, 0, 0, 1);
   --text-dark: rgba(0, 0, 0, 1);
   --main-back: rgba(255, 255, 255, 1);
   --text-light: rgba(255, 255, 255, 1);
+  --success-color: rgba(46, 204, 113, 1);
+  --error-color: rgba(231, 76, 60, 1);
   --header-overlay: rgba(0, 0, 0, 0.6);
   --header-overlay: linear-gradient(
     160deg,
@@ -23,6 +28,9 @@
 }
 html {
   font-size: 62.5%;
+}
+* {
+  box-sizing: border-box;
 }
 body {
   font-size: 1.6rem;
@@ -51,101 +59,6 @@ body {
 .header__logo h1 {
   margin: 0;
   padding: 0;
-}
-/*Navbar*/
-.navbar {
-  margin-left: auto;
-}
-.navbar__icon-wrapper {
-  position: relative;
-  margin-bottom: 8rem;
-  display: none;
-}
-.navbar__icon {
-  padding: 0.8rem 1.2rem;
-  border-radius: 50%;
-  position: absolute;
-  right: 0;
-  font-size: 3rem;
-  color: var(--nav-icon);
-  background-color: var(--nav-icon-back);
-}
-.navbar__icon:hover {
-  cursor: pointer;
-  background-color: var(--nav-icon-back-hov);
-}
-.navbar__menu {
-  list-style-type: none;
-  color: var(--nav-item);
-  display: block;
-}
-.navbar__menu ul {
-  margin: 0;
-  list-style-type: none;
-  display: flex;
-  flex-direction: row;
-}
-.navbar__menu li {
-  margin: 0 2px;
-  padding: 0.6rem 1rem;
-  display: flex;
-  align-items: center;
-  padding-bottom: 3px;
-}
-.navbar__menu a,
-.navbar__menu a:active,
-.navbar__menu a:visited {
-  text-decoration: none;
-  color: inherit;
-}
-.navbar__menu li:hover {
-  border-radius: 2px;
-  position: relative;
-}
-.navbar__menu li:hover:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 100%;
-
-  bottom: -4px;
-  border-top: 3px solid white;
-  border-radius: 50%;
-}
-.navbar__menu .active {
-  color: var(--nav-active);
-  position: relative;
-}
-.navbar__menu .active:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 100%;
-
-  bottom: -4px;
-  border-top: 3px solid white;
-  border-radius: 50%;
-}
-.navbar__menu button,
-.navbar__menu button:focus,
-.navbar__menu button:active {
-  width: 8rem;
-  height: 3rem;
-  color: var(--text-light);
-  background-color: rgba(0, 0, 0, 0);
-  border-radius: 100px;
-  border: 2px solid var(--text-light);
-}
-.navbar__menu button:hover {
-  cursor: pointer;
-  color: var(--text-dark);
-  background-color: var(--text-light);
-  border-radius: 100px;
-  border: 2px solid var(--text-light);
 }
 /*header-content*/
 .header__content {
