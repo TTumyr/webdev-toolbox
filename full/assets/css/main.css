@@ -1,7 +1,10 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+
 @import "navbar.css";
 @import "forms.css";
 @import "home.css";
 :root {
+  /* general colors */
   --white: rgba(255, 255, 255, 1);
   --black: rgba(0, 0, 0, 1);
   --text-dark: rgba(0, 0, 0, 1);
@@ -9,6 +12,7 @@
   --text-light: rgba(255, 255, 255, 1);
   --success-color: rgba(46, 204, 113, 1);
   --error-color: rgba(231, 76, 60, 1);
+  /* header specific colors */
   --header-overlay: rgba(0, 0, 0, 0.6);
   --header-overlay: linear-gradient(
     160deg,
@@ -17,12 +21,20 @@
     rgb(71, 172, 150)
   );
   --logo-text: rgba(255, 255, 255, 1);
+  /* nav specific colors */
   --nav-icon: rgba(0, 200, 240, 1);
   --nav-icon-back: rgba(10, 10, 10, 0.2);
   --nav-icon-back-hov: rgba(70, 100, 100, 0.7);
   --nav-item: rgba(255, 255, 255, 1);
   --nav-active: rgba(255, 255, 255, 1);
   --nav-active-back: rgba(0, 200, 240);
+  /* form specific colors */
+  --frm-border: rgba(240, 240, 240, 1);
+  --frm-border-fcs: rgba(119, 119, 119, 1);
+  --frm-label: rgba(119, 119, 119, 1);
+  --frm-btn: rgba(52, 152, 219, 1);
+  --frm-btn-hov: rgb(41, 122, 177);
+  /* footer specific colors */
   --footer: rgba(255, 255, 255, 1);
   --footer-back: rgba(70, 100, 100, 0.7);
 }

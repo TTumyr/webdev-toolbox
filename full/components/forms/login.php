@@ -1,14 +1,14 @@
 <div class="form-wrapper">
-  <form action="<?= $cfg->rD ?>/login" method="POST" class="form">
+  <form action="<?= $cfg->rD ?>/login" method="POST" class="form" id="logfrm">
     <h2>Login Form</h2>
     <input type="hidden" name="csrf" value="<?=$csrf?>">
     <div class="form-control">
       <label for="username">Username</label>
-      <input type="text" name="username" id="username" />
+      <input type="text" name="username" id="loguser" />
     </div>
     <div class="form-control">
       <label for="password">Password</label>
-      <input type="text" name="password" id="password" />
+      <input type="password" name="password" id="logpassword" />
     </div>
     <button class="submit">Login</button>
   </form>
