@@ -1,10 +1,6 @@
 <?php
 
-//initialization
-require('php/classes/cf.php');
-$cfg = new Cf();
-$cfg->getRD();
-$db = new MySQL;
+require('php/sitesetup.php');
 
 //set up session
 session_name('sid');
@@ -27,6 +23,7 @@ switch ($cfg->redirect) {
         break;
     case $cfg->rD . '/login'   :
     case $cfg->rD . '/register'   :
+    case $cfg->rD . '/json/username' :
         require __DIR__ . '/php/user.php';
         break;
     default:

@@ -1,11 +1,12 @@
 <?php
     class User_Reg_Validate {
         public function __construct($pdo) {
-            $this->username = trim($_POST['username']);
-            $this->email = trim($_POST['email']);
-            $this->cmail = trim($_POST['cemail']);
-            $this->password = $_POST['password'];
-            $this->cpassword = $_POST['cpassword'];
+            $this->json = json_decode(file_get_contents('php://input'), true);
+            $this->username = trim($_POST['username']) || "";
+            $this->email = trim($_POST['email']) || "";
+            $this->cmail = trim($_POST['cemail']) || "";
+            $this->password = $_POST['password'] || "";
+            $this->cpassword = $_POST['cpassword'] || "";
             $this->hash = '';
             $this->errors = [];
             $this->db = new mySQL();

@@ -1,6 +1,6 @@
 <?php
     //Site configuration
-    class Cf {
+    class Cfg {
         public function __construct() {
             $this->origin = ['http://localhost', 'https://localhost']; //Same origin policy. Set separate www and none-www. Example: ['http://www.domain.com', 'http://domain.com'] 
             $this->redirect = $_SERVER['REQUEST_URI'];

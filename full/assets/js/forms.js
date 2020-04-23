@@ -1,8 +1,9 @@
 //
-const regfrm = {
+const regFrm = {
   form: document.getElementById("regform"),
   // form fields
   fields: {
+    csrf: document.getElementById("csrf"),
     username: document.getElementById("username"),
     email: document.getElementById("email"),
     cemail: document.getElementById("cemail"),
@@ -12,9 +13,10 @@ const regfrm = {
   valid: {
     userMin: 4,
     userMax: 30,
-    pwMin: 6,
+    pwMin: 3,
     pwMax: 255,
   },
+  inputTimer: "",
   // form functions
   showError(input, message) {
     const formControl = input.parentElement;
@@ -60,7 +62,8 @@ const regfrm = {
         `${this.getFieldName(input)} must be less than ${max} characters`
       );
     } else {
-      this.showSuccess(input);
+      return true;
+      //this.showSuccess(input);
     }
   },
   checkEmail(input1, input2) {
@@ -90,6 +93,68 @@ const regfrm = {
       );
     }
   },
+  inputHandler(fields, e) {
+    this.inputTimer = setTimeout(() => {
+      console.log(e);
+      switch (e.target.name) {
+        case "username":
+          {
+            if (e.target.value !== "") {
+              //checks if username meets requiremenets
+              if (
+                this.checkLength(
+                  fields.username,
+                  this.valid.userMin,
+                  this.valid.userMax
+                )
+              ) {
+                fetch("http://localhost/json/username", {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  method: "POST",
+                  body: JSON.stringify({
+                    csrf: this.fields.csrf.value,
+                    username: e.target.value,
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((resdata) => console.log(resdata));
+              }
+            } else {
+              this.removeInput(e.target);
+            }
+          }
+          break;
+        case "email":
+        case "cemail":
+          {
+            if (
+              e.target.parentElement.querySelectorAll("input")[0].value ||
+              e.target.parentElement.querySelectorAll("input")[1].value !== ""
+            ) {
+              this.checkEmail(fields.email, fields.cemail);
+            } else {
+              this.removeInput(e.target);
+            }
+          }
+          break;
+        case "password":
+        case "cpassword":
+          {
+            if (
+              e.target.parentElement.querySelectorAll("input")[0].value ||
+              e.target.parentElement.querySelectorAll("input")[1].value !== ""
+            ) {
+              this.checkPassword(fields.password, fields.cpassword);
+            } else {
+              this.removeInput(e.target);
+            }
+          }
+          break;
+      }
+    }, 2000);
+  },
   eventHandler(fields, e) {
     e.preventDefault();
     switch (e.type) {
@@ -109,57 +174,74 @@ const regfrm = {
           );
           this.checkLength(fields.password, this.valid.pwMin, this.valid.pwMax);
           this.checkEmail(fields.email, fields.cemail);
-          this.checkPasswordsMatch(fields.password, fields.cpassword);
+          this.checkPassword(fields.password, fields.cpassword);
         }
         break;
-      case "input":
+      case "change":
+      case "input": //TOREVIEW
         {
-          switch (e.target.name) {
-            case "username":
-              {
-                if (e.target.value !== "") {
-                  this.checkLength(
-                    fields.username,
-                    this.valid.userMin,
-                    this.valid.userMax
-                  );
-                } else {
-                  this.removeInput(e.target);
+          clearTimeout(this.inputTimer);
+          this.inputTimer = setTimeout(() => {
+            switch (e.target.name) {
+              case "username":
+                {
+                  if (e.target.value !== "") {
+                    //checks if username meets requiremenets
+                    if (
+                      this.checkLength(
+                        fields.username,
+                        this.valid.userMin,
+                        this.valid.userMax
+                      )
+                    ) {
+                      fetch("http://localhost/json/username", {
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        method: "POST",
+                        body: JSON.stringify({
+                          csrf: this.fields.csrf.value,
+                          username: e.target.value,
+                        }),
+                      })
+                        .then((response) => response.json())
+                        .then((resdata) => console.log(resdata));
+                    }
+                  } else {
+                    this.removeInput(e.target);
+                  }
                 }
-              }
-              break;
-            case "email":
-            case "cemail":
-              console.log(
-                e.target.parentElement.querySelectorAll("input")[1].value
-              );
-              {
-                if (
-                  e.target.parentElement.querySelectorAll("input")[0].value ||
-                  e.target.parentElement.querySelectorAll("input")[1].value !==
-                    ""
-                ) {
-                  this.checkEmail(fields.email, fields.cemail);
-                } else {
-                  this.removeInput(e.target);
+                break;
+              case "email":
+              case "cemail":
+                {
+                  if (
+                    e.target.parentElement.querySelectorAll("input")[0].value ||
+                    e.target.parentElement.querySelectorAll("input")[1]
+                      .value !== ""
+                  ) {
+                    this.checkEmail(fields.email, fields.cemail);
+                  } else {
+                    this.removeInput(e.target);
+                  }
                 }
-              }
-              break;
-            case "password":
-            case "cpassword":
-              {
-                if (
-                  e.target.parentElement.querySelectorAll("input")[0].value ||
-                  e.target.parentElement.querySelectorAll("input")[1].value !==
-                    ""
-                ) {
-                  this.checkPassword(fields.password, fields.cpassword);
-                } else {
-                  this.removeInput(e.target);
+                break;
+              case "password":
+              case "cpassword":
+                {
+                  if (
+                    e.target.parentElement.querySelectorAll("input")[0].value ||
+                    e.target.parentElement.querySelectorAll("input")[1]
+                      .value !== ""
+                  ) {
+                    this.checkPassword(fields.password, fields.cpassword);
+                  } else {
+                    this.removeInput(e.target);
+                  }
                 }
-              }
-              break;
-          }
+                break;
+            }
+          }, 2000);
         }
         break;
     }
@@ -179,4 +261,4 @@ const regfrm = {
   },
 };
 
-regfrm.init();
+regFrm.init();
