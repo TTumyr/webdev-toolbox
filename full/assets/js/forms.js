@@ -11,11 +11,16 @@ const regFrm = {
     cpassword: document.getElementById("cpassword"),
   },
   valid: {
+    fetch: {
+      user: "http://localhost/json/username",
+      email: "http://localhost/json/email",
+    },
     userMin: 4,
     userMax: 30,
     pwMin: 3,
     pwMax: 255,
   },
+  inputTimeout: 1000,
   inputTimer: "",
   // form functions
   showError(input, message) {
@@ -74,7 +79,8 @@ const regFrm = {
       emailReg.test(input2.value.trim()) &&
       input1.value === input2.value
     ) {
-      this.showSuccess(input1);
+      //this.showSuccess(input1);
+      return true;
     } else if (input1.value !== input2.value) {
       this.showError(input1, "Emails do not match");
     } else {
@@ -93,67 +99,39 @@ const regFrm = {
       );
     }
   },
-  inputHandler(fields, e) {
-    this.inputTimer = setTimeout(() => {
-      console.log(e);
-      switch (e.target.name) {
-        case "username":
-          {
-            if (e.target.value !== "") {
-              //checks if username meets requiremenets
-              if (
-                this.checkLength(
-                  fields.username,
-                  this.valid.userMin,
-                  this.valid.userMax
-                )
-              ) {
-                fetch("http://localhost/json/username", {
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  method: "POST",
-                  body: JSON.stringify({
-                    csrf: this.fields.csrf.value,
-                    username: e.target.value,
-                  }),
-                })
-                  .then((response) => response.json())
-                  .then((resdata) => console.log(resdata));
-              }
-            } else {
-              this.removeInput(e.target);
-            }
-          }
-          break;
-        case "email":
-        case "cemail":
-          {
-            if (
-              e.target.parentElement.querySelectorAll("input")[0].value ||
-              e.target.parentElement.querySelectorAll("input")[1].value !== ""
-            ) {
-              this.checkEmail(fields.email, fields.cemail);
-            } else {
-              this.removeInput(e.target);
-            }
-          }
-          break;
-        case "password":
-        case "cpassword":
-          {
-            if (
-              e.target.parentElement.querySelectorAll("input")[0].value ||
-              e.target.parentElement.querySelectorAll("input")[1].value !== ""
-            ) {
-              this.checkPassword(fields.password, fields.cpassword);
-            } else {
-              this.removeInput(e.target);
-            }
-          }
-          break;
-      }
-    }, 2000);
+  fetchValidator(e, fetchUrl, username, email) {
+    // variables for the fetch
+    let resdataField = "";
+    const fetchData = {
+      csrf: this.fields.csrf.value,
+    };
+    if (username) fetchData["username"] = username;
+    if (email) fetchData["email"] = email;
+    if (username) resdataField = "name";
+    if (email) resdataField = "email";
+
+    fetch(fetchUrl, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(fetchData),
+    })
+      .then((response) => response.json())
+      .then((resdata) => {
+        if (
+          resdata.length !== 0 &&
+          resdata !== undefined &&
+          e.target.value === resdata[0][resdataField]
+        ) {
+          let fieldName = e.target.name === "cemail" ? "email" : e.target.name;
+          this.showError(
+            e.target,
+            `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is taken`
+          );
+        } else {
+        }
+      });
   },
   eventHandler(fields, e) {
     e.preventDefault();
@@ -177,9 +155,9 @@ const regFrm = {
           this.checkPassword(fields.password, fields.cpassword);
         }
         break;
-      case "change":
-      case "input": //TOREVIEW
+      case "input":
         {
+          this.removeInput(e.target);
           clearTimeout(this.inputTimer);
           this.inputTimer = setTimeout(() => {
             switch (e.target.name) {
@@ -194,18 +172,12 @@ const regFrm = {
                         this.valid.userMax
                       )
                     ) {
-                      fetch("http://localhost/json/username", {
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        method: "POST",
-                        body: JSON.stringify({
-                          csrf: this.fields.csrf.value,
-                          username: e.target.value,
-                        }),
-                      })
-                        .then((response) => response.json())
-                        .then((resdata) => console.log(resdata));
+                      this.fetchValidator(
+                        e,
+                        this.valid.fetch.user,
+                        e.target.value,
+                        null
+                      );
                     }
                   } else {
                     this.removeInput(e.target);
@@ -220,7 +192,15 @@ const regFrm = {
                     e.target.parentElement.querySelectorAll("input")[1]
                       .value !== ""
                   ) {
-                    this.checkEmail(fields.email, fields.cemail);
+                    if (this.checkEmail(fields.email, fields.cemail)) {
+                      this.fetchValidator(
+                        e,
+                        this.valid.fetch.email,
+                        null,
+                        e.target.value
+                      );
+                      //this.showSuccess(fields.email);
+                    }
                   } else {
                     this.removeInput(e.target);
                   }
@@ -241,7 +221,7 @@ const regFrm = {
                 }
                 break;
             }
-          }, 2000);
+          }, 1000);
         }
         break;
     }

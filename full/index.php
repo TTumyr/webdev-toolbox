@@ -24,6 +24,7 @@ switch ($cfg->redirect) {
     case $cfg->rD . '/login'   :
     case $cfg->rD . '/register'   :
     case $cfg->rD . '/json/username' :
+    case $cfg->rD . '/json/email' :
         require __DIR__ . '/php/user.php';
         break;
     default:

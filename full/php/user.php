@@ -29,5 +29,13 @@
         $dbuser->get($dbuser->sql);
         echo(json_encode($dbuser->data));
         //echo(json_encode($file));
+    } elseif (strpos($_SERVER['REQUEST_URI'], 'json/email')) {
+        $file = file_get_contents('php://input');
+        $postdata = json_decode(file_get_contents('php://input'), true);
+        $db = new mySQL();
+        $dbuser = new DBQuery($db->pdo);
+        $dbuser->querySpecific($db->users['email'], $db->users['table'], $db->users['email'], $postdata['email']);
+        $dbuser->get($dbuser->sql);
+        echo(json_encode($dbuser->data));
     }
 ?>
