@@ -35,7 +35,7 @@ const regFrm = {
     formControl.classList.add("success");
   },
   getFieldName(input) {
-    return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+    return input.charAt(0).toUpperCase() + input.slice(1);
   },
   removeInput(input) {
     const formControl = input.parentElement;
@@ -48,7 +48,7 @@ const regFrm = {
   checkRequired(inputArr) {
     inputArr.forEach((input) => {
       if (input.value.trim() === "") {
-        this.showError(input, `${this.getFieldName(input)} is required`);
+        this.showError(input, `${this.getFieldName(input.id)} is required`);
       } else {
         this.showSuccess(input);
       }
@@ -59,12 +59,12 @@ const regFrm = {
     if (input.value.length < min) {
       this.showError(
         input,
-        `${this.getFieldName(input)} must be at least ${min} characters`
+        `${this.getFieldName(input.id)} must be at least ${min} characters`
       );
     } else if (input.value.length > max) {
       this.showError(
         input,
-        `${this.getFieldName(input)} must be less than ${max} characters`
+        `${this.getFieldName(input.id)} must be less than ${max} characters`
       );
     } else {
       return true;
@@ -92,11 +92,16 @@ const regFrm = {
     if (input1.value !== input2.value) {
       this.showError(input2, "Passwords do not match");
     } else {
-      this.checkLength(
-        this.fields.password,
-        this.valid.pwMin,
-        this.valid.pwMax
-      );
+      if (
+        this.checkLength(
+          this.fields.password,
+          this.valid.pwMin,
+          this.valid.pwMax
+        )
+      ) {
+        this.showSuccess(input1);
+        this.showSuccess(input2);
+      }
     }
   },
   fetchValidator(e, fetchUrl, username, email) {
@@ -125,11 +130,9 @@ const regFrm = {
           e.target.value === resdata[0][resdataField]
         ) {
           let fieldName = e.target.name === "cemail" ? "email" : e.target.name;
-          this.showError(
-            e.target,
-            `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is taken`
-          );
+          this.showError(e.target, `${this.getFieldName(fieldName)} is taken`);
         } else {
+          this.showSuccess(e.target);
         }
       });
   },
