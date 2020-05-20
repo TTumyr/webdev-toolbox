@@ -34,6 +34,7 @@
   --frm-label: rgba(119, 119, 119, 1);
   --frm-btn: rgba(52, 152, 219, 1);
   --frm-btn-hov: rgb(41, 122, 177);
+  --frm-btn-disabled: rgb(146, 146, 146);
   /* footer specific colors */
   --footer: rgba(255, 255, 255, 1);
   --footer-back: rgba(70, 100, 100, 0.7);

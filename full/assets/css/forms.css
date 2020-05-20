@@ -77,3 +77,7 @@
 .form button:hover {
   background: var(--frm-btn-hov);
 }
+.form button:disabled {
+  background: var(--frm-btn-disabled);
+  border: 2px solid var(--frm-btn-disabled);
+}

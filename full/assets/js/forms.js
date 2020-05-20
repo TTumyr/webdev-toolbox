@@ -9,11 +9,17 @@ const regFrm = {
     cemail: document.getElementById("cemail"),
     password: document.getElementById("password"),
     cpassword: document.getElementById("cpassword"),
+    regSubmit: document.getElementById("regsubmit"),
   },
   valid: {
     fetch: {
       user: "http://localhost/json/username",
       email: "http://localhost/json/email",
+    },
+    register: {
+      username: false,
+      email: false,
+      password: false,
     },
     userMin: 4,
     userMax: 30,
@@ -33,6 +39,11 @@ const regFrm = {
   showSuccess(input) {
     const formControl = input.parentElement;
     formControl.classList.add("success");
+    let fieldValid =
+      input.id.charAt(0) === "c"
+        ? input.id.slice(1, input.id.length)
+        : input.id;
+    this.registerValidate(fieldValid, true);
   },
   getFieldName(input) {
     return input.charAt(0).toUpperCase() + input.slice(1);
@@ -44,6 +55,11 @@ const regFrm = {
     const span = formControl.querySelector("span");
     const small = span.querySelector("small");
     small.innerText = "";
+    let fieldValid =
+      input.id.charAt(0) === "c"
+        ? input.id.slice(1, input.id.length)
+        : input.id;
+    this.registerValidate(fieldValid, false);
   },
   checkRequired(inputArr) {
     inputArr.forEach((input) => {
@@ -68,7 +84,6 @@ const regFrm = {
       );
     } else {
       return true;
-      //this.showSuccess(input);
     }
   },
   checkEmail(input1, input2) {
@@ -79,7 +94,6 @@ const regFrm = {
       emailReg.test(input2.value.trim()) &&
       input1.value === input2.value
     ) {
-      //this.showSuccess(input1);
       return true;
     } else if (input1.value !== input2.value) {
       this.showError(input1, "Emails do not match");
@@ -103,38 +117,6 @@ const regFrm = {
         this.showSuccess(input2);
       }
     }
-  },
-  fetchValidator(e, fetchUrl, username, email) {
-    // variables for the fetch
-    let resdataField = "";
-    const fetchData = {
-      csrf: this.fields.csrf.value,
-    };
-    if (username) fetchData["username"] = username;
-    if (email) fetchData["email"] = email;
-    if (username) resdataField = "name";
-    if (email) resdataField = "email";
-
-    fetch(fetchUrl, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(fetchData),
-    })
-      .then((response) => response.json())
-      .then((resdata) => {
-        if (
-          resdata.length !== 0 &&
-          resdata !== undefined &&
-          e.target.value === resdata[0][resdataField]
-        ) {
-          let fieldName = e.target.name === "cemail" ? "email" : e.target.name;
-          this.showError(e.target, `${this.getFieldName(fieldName)} is taken`);
-        } else {
-          this.showSuccess(e.target);
-        }
-      });
   },
   eventHandler(fields, e) {
     e.preventDefault();
@@ -202,7 +184,6 @@ const regFrm = {
                         null,
                         e.target.value
                       );
-                      //this.showSuccess(fields.email);
                     }
                   } else {
                     this.removeInput(e.target);
@@ -227,6 +208,50 @@ const regFrm = {
           }, 1000);
         }
         break;
+    }
+  },
+  fetchValidator(e, fetchUrl, username, email) {
+    // variables for the fetch
+    let resdataField = "";
+    const fetchData = {
+      csrf: this.fields.csrf.value,
+    };
+    if (username) fetchData["username"] = username;
+    if (email) fetchData["email"] = email;
+    if (username) resdataField = "name";
+    if (email) resdataField = "email";
+
+    fetch(fetchUrl, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(fetchData),
+    })
+      .then((response) => response.json())
+      .then((resdata) => {
+        if (
+          resdata.length !== 0 &&
+          resdata !== undefined &&
+          e.target.value === resdata[0][resdataField]
+        ) {
+          let fieldName = e.target.name === "cemail" ? "email" : e.target.name;
+          this.showError(e.target, `${this.getFieldName(fieldName)} is taken`);
+        } else {
+          this.showSuccess(e.target);
+        }
+      });
+  },
+  registerValidate(validField, condition) {
+    this.valid.register[validField] = condition;
+    if (
+      this.valid.register.username === true &&
+      this.valid.register.email === true &&
+      this.valid.register.password === true
+    ) {
+      this.fields.regSubmit.disabled = false;
+    } else {
+      this.fields.regSubmit.disabled = true;
     }
   },
 
