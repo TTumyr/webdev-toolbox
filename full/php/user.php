@@ -23,12 +23,9 @@
         $postdata = json_decode(file_get_contents('php://input'), true);
         $db = new mySQL();
         $dbuser = new DBQuery($db->pdo);
-        //$dbuser->querySpecific($_POST['username'], $dbsql->users['table']);
-        //$dbuser->querySpecific($db->users['name'], $db->users['table'], $db->users['name'], $_POST['username']);
         $dbuser->querySpecific($db->users['name'], $db->users['table'], $db->users['name'], $postdata['username']);
         $dbuser->get($dbuser->sql);
         echo(json_encode($dbuser->data));
-        //echo(json_encode($file));
     } elseif (strpos($_SERVER['REQUEST_URI'], 'json/email')) {
         $file = file_get_contents('php://input');
         $postdata = json_decode(file_get_contents('php://input'), true);

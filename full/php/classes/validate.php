@@ -4,9 +4,7 @@
             $this->json = json_decode(file_get_contents('php://input'), true);
             $this->username = trim($_POST['username']) || "";
             $this->email = trim($_POST['email']) || "";
-            $this->cmail = trim($_POST['cemail']) || "";
             $this->password = $_POST['password'] || "";
-            $this->cpassword = $_POST['cpassword'] || "";
             $this->hash = '';
             $this->errors = [];
             $this->db = new mySQL();
@@ -26,15 +24,11 @@
             } elseif (!preg_match("/^[a-zA-Z1-9]+$/",$this->username)) {
                 $this->errors['nameError'] = "Username may only contain characters and numbers";
             }
-            if($this->email !== $this->cmail) {
-                $this->errors['emailError'] = "Email and confirm email do not match";
-            } elseif(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) {
+            if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) {
                 $this->errors['emailError'] = "Please enter a valid email";
             }
-            if($this->password !== $this->cpassword) {
-                $this->errors['passwordError'] = "Password and confirm password do not match";
-            } elseif(strlen($this->password) < 3) {
-                $this->errors['passwordError'] = "Password must be minimum 6 characters long";
+            if(strlen($this->password) < 3) {
+                $this->errors['passwordError'] = "Password must be minimum 3 characters long";
             }
             if(empty($this->errors)) {
                 $this->DBQuery->querySpecific($this->db->users['name'], $this->db->users['table'], $this->db->users['name'], $_POST['username']);

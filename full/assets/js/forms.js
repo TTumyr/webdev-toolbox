@@ -1,4 +1,3 @@
-//
 const regFrm = {
   form: document.getElementById("regform"),
   // form fields
@@ -6,138 +5,118 @@ const regFrm = {
     csrf: document.getElementById("csrf"),
     username: document.getElementById("username"),
     email: document.getElementById("email"),
-    cemail: document.getElementById("cemail"),
     password: document.getElementById("password"),
-    cpassword: document.getElementById("cpassword"),
     regSubmit: document.getElementById("regsubmit"),
   },
-  valid: {
-    fetch: {
-      user: "http://localhost/json/username",
-      email: "http://localhost/json/email",
-    },
-    register: {
-      username: false,
-      email: false,
-      password: false,
-    },
+  url: {
+    user: "http://localhost/json/username",
+    email: "http://localhost/json/email",
+    register: "http://localhost/register",
+  },
+  limits: {
     userMin: 4,
     userMax: 30,
     pwMin: 3,
     pwMax: 255,
   },
-  inputTimeout: 1000,
-  inputTimer: "",
-  // form functions
-  showError(input, message) {
-    const formControl = input.parentElement;
-    formControl.classList.add("error");
-    const span = formControl.querySelector("span");
-    const small = span.querySelector("small");
-    small.innerText = message;
+  readyStatus: {
+    username: false,
+    email: false,
+    password: false,
   },
-  showSuccess(input) {
-    const formControl = input.parentElement;
-    formControl.classList.add("success");
-    let fieldValid =
-      input.id.charAt(0) === "c"
-        ? input.id.slice(1, input.id.length)
-        : input.id;
-    this.registerValidate(fieldValid, true);
-  },
-  getFieldName(input) {
-    return input.charAt(0).toUpperCase() + input.slice(1);
-  },
-  removeInput(input) {
-    const formControl = input.parentElement;
-    formControl.classList.remove("error");
-    formControl.classList.remove("success");
-    const span = formControl.querySelector("span");
-    const small = span.querySelector("small");
-    small.innerText = "";
-    let fieldValid =
-      input.id.charAt(0) === "c"
-        ? input.id.slice(1, input.id.length)
-        : input.id;
-    this.registerValidate(fieldValid, false);
-  },
-  checkRequired(inputArr) {
-    inputArr.forEach((input) => {
-      if (input.value.trim() === "") {
-        this.showError(input, `${this.getFieldName(input.id)} is required`);
-      } else {
-        this.showSuccess(input);
-      }
+  addEventListeners() {
+    ["submit", "input", "change"].forEach((listen) => {
+      this.form.addEventListener(listen, this.eventHandler.bind(this, this));
     });
   },
-  checkLength(input, min, max) {
-    this.removeInput(input);
-    if (input.value.length < min) {
-      this.showError(
-        input,
-        `${this.getFieldName(input.id)} must be at least ${min} characters`
-      );
-    } else if (input.value.length > max) {
-      this.showError(
-        input,
-        `${this.getFieldName(input.id)} must be less than ${max} characters`
-      );
-    } else {
-      return true;
-    }
-  },
-  checkEmail(input1, input2) {
-    this.removeInput(input1);
+  checkEmail(el) {
+    this.removeInput(el);
     const emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (
-      emailReg.test(input1.value.trim()) &&
-      emailReg.test(input2.value.trim()) &&
-      input1.value === input2.value
-    ) {
+    if (emailReg.test(el.value.trim())) {
       return true;
-    } else if (input1.value !== input2.value) {
-      this.showError(input1, "Emails do not match");
     } else {
-      this.showError(input1, "Email is not valid");
+      this.showError(el, "Email is not valid");
     }
   },
-  checkPassword(input1, input2) {
-    this.removeInput(input1);
-    if (input1.value !== input2.value) {
-      this.showError(input2, "Passwords do not match");
+  checkIfExists(e, fetchUrl, username, email) {
+    // variables for the fetch
+    let formField = "";
+    const fetchObject = {
+      csrf: this.fields.csrf.value,
+    };
+    if (username) fetchObject["username"] = username;
+    if (email) fetchObject["email"] = email;
+    if (username) formField = "name";
+    if (email) formField = "email";
+
+    fetch(fetchUrl, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(fetchObject),
+    })
+      .then((response) => response.json())
+      .then((resData) => {
+        if (
+          resData.length !== 0 &&
+          resData !== undefined &&
+          e.target.value === resData[0][formField]
+        ) {
+          this.showError(
+            e.target,
+            `${username ? "Username" : "Email address"} is not available`
+          );
+        } else {
+          this.showSuccess(e.target);
+        }
+      });
+  },
+  checkLength(el, min, max) {
+    this.removeInput(el);
+    if (el.value.length < min) {
+      this.showError(el, `Password must be at least ${min} characters`);
+    } else if (el.value.length > max) {
+      this.showError(el, `Password must be less than ${max} characters`);
     } else {
-      if (
-        this.checkLength(
-          this.fields.password,
-          this.valid.pwMin,
-          this.valid.pwMax
-        )
-      ) {
-        this.showSuccess(input1);
-        this.showSuccess(input2);
-      }
+      return true;
     }
   },
-  eventHandler(fields, e) {
+  checkPassword(el) {
+    this.removeInput(el);
+    if (
+      this.checkLength(
+        this.fields.password,
+        this.limits.pwMin,
+        this.limits.pwMax
+      )
+    ) {
+      this.showSuccess(el);
+    }
+  },
+  eventHandler(el, e) {
     e.preventDefault();
     switch (e.type) {
       case "submit":
         {
-          this.checkRequired([
-            fields.username,
-            fields.email,
-            fields.cemail,
-            fields.password,
-            fields.cpassword,
-          ]);
           this.checkLength(
-            fields.username,
-            this.valid.userMin,
-            this.valid.userMax
+            this.fields.username,
+            this.limits.userMin,
+            this.limits.userMax
           );
-          this.checkLength(fields.password, this.valid.pwMin, this.valid.pwMax);
-          this.checkEmail(fields.email, fields.cemail);
-          this.checkPassword(fields.password, fields.cpassword);
+          this.checkLength(
+            this.fields.password,
+            this.limits.pwMin,
+            this.limits.pwMax
+          );
+          this.checkEmail(this.fields.email);
+          const registerObject = {
+            csrf: el.fields.csrf.value,
+            username: el.fields.username.value,
+            email: el.fields.email.value,
+            password: el.fields.password.value,
+          };
+          this.registerUser(this.url.register, registerObject);
         }
         break;
       case "input":
@@ -152,14 +131,14 @@ const regFrm = {
                     //checks if username meets requiremenets
                     if (
                       this.checkLength(
-                        fields.username,
-                        this.valid.userMin,
-                        this.valid.userMax
+                        el.fields.username,
+                        this.limits.userMin,
+                        this.limits.userMax
                       )
                     ) {
-                      this.fetchValidator(
+                      this.checkIfExists(
                         e,
-                        this.valid.fetch.user,
+                        this.url.user,
                         e.target.value,
                         null
                       );
@@ -170,17 +149,14 @@ const regFrm = {
                 }
                 break;
               case "email":
-              case "cemail":
                 {
                   if (
-                    e.target.parentElement.querySelectorAll("input")[0].value ||
-                    e.target.parentElement.querySelectorAll("input")[1]
-                      .value !== ""
+                    e.target.parentElement.querySelectorAll("input")[0].value
                   ) {
-                    if (this.checkEmail(fields.email, fields.cemail)) {
-                      this.fetchValidator(
+                    if (this.checkEmail(el.fields.email)) {
+                      this.checkIfExists(
                         e,
-                        this.valid.fetch.email,
+                        this.url.email,
                         null,
                         e.target.value
                       );
@@ -191,14 +167,9 @@ const regFrm = {
                 }
                 break;
               case "password":
-              case "cpassword":
                 {
-                  if (
-                    e.target.parentElement.querySelectorAll("input")[0].value ||
-                    e.target.parentElement.querySelectorAll("input")[1]
-                      .value !== ""
-                  ) {
-                    this.checkPassword(fields.password, fields.cpassword);
+                  if (e.target.value) {
+                    this.checkPassword(el.fields.password);
                   } else {
                     this.removeInput(e.target);
                   }
@@ -208,64 +179,66 @@ const regFrm = {
           }, 1000);
         }
         break;
+      case "change":
+        {
+          switch (e.target.name) {
+            case "password":
+              {
+                if (e.target.value) {
+                  this.checkPassword(el.fields.password);
+                } else {
+                  this.removeInput(e.target);
+                }
+              }
+              break;
+          }
+        }
+        break;
     }
   },
-  fetchValidator(e, fetchUrl, username, email) {
-    // variables for the fetch
-    let resdataField = "";
-    const fetchData = {
-      csrf: this.fields.csrf.value,
-    };
-    if (username) fetchData["username"] = username;
-    if (email) fetchData["email"] = email;
-    if (username) resdataField = "name";
-    if (email) resdataField = "email";
-
+  init() {
+    this.addEventListeners();
+  },
+  registerUser(fetchUrl, registerObject) {
     fetch(fetchUrl, {
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify(fetchData),
+      body: JSON.stringify(registerObject),
     })
       .then((response) => response.json())
-      .then((resdata) => {
-        if (
-          resdata.length !== 0 &&
-          resdata !== undefined &&
-          e.target.value === resdata[0][resdataField]
-        ) {
-          let fieldName = e.target.name === "cemail" ? "email" : e.target.name;
-          this.showError(e.target, `${this.getFieldName(fieldName)} is taken`);
-        } else {
-          this.showSuccess(e.target);
-        }
+      .then((resData) => {
+        console.log(resData);
       });
   },
-  registerValidate(validField, condition) {
-    this.valid.register[validField] = condition;
+  removeInput(el) {
+    el.parentElement.classList.remove("error");
+    el.parentElement.classList.remove("success");
+    el.parentElement.querySelector("span").querySelector("small").innerText =
+      "";
+  },
+  showError(el, message) {
+    el.parentElement.classList.add("error");
+    el.parentElement
+      .querySelector("span")
+      .querySelector("small").innerText = message;
+  },
+  showSuccess(el) {
+    el.parentElement.classList.add("success");
+    this.changeReadyStatus(el.id.toLowerCase(), true);
+  },
+  changeReadyStatus(el, condition) {
+    this.readyStatus[el] = condition;
     if (
-      this.valid.register.username === true &&
-      this.valid.register.email === true &&
-      this.valid.register.password === true
+      this.readyStatus.username === true &&
+      this.readyStatus.email === true &&
+      this.readyStatus.password === true
     ) {
       this.fields.regSubmit.disabled = false;
     } else {
       this.fields.regSubmit.disabled = true;
     }
-  },
-
-  // event listeners
-  addEventListeners() {
-    ["submit", "input"].forEach((listen) => {
-      this.form.addEventListener(
-        listen,
-        this.eventHandler.bind(this, this.fields)
-      );
-    });
-  },
-  init() {
-    this.addEventListeners();
   },
 };
 
