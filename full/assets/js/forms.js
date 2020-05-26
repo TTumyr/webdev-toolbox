@@ -94,6 +94,48 @@ const regFrm = {
       this.showSuccess(el);
     }
   },
+  eventContent(el, e) {
+    switch (e.target.name) {
+      case "username":
+        {
+          if (e.target.value !== "") {
+            //checks if username meets requiremenets
+            if (
+              this.checkLength(
+                el.fields.username,
+                this.limits.userMin,
+                this.limits.userMax
+              )
+            ) {
+              this.checkIfExists(e, this.url.user, e.target.value, null);
+            }
+          } else {
+            this.removeInput(e.target);
+          }
+        }
+        break;
+      case "email":
+        {
+          if (e.target.parentElement.querySelectorAll("input")[0].value) {
+            if (this.checkEmail(el.fields.email)) {
+              this.checkIfExists(e, this.url.email, null, e.target.value);
+            }
+          } else {
+            this.removeInput(e.target);
+          }
+        }
+        break;
+      case "password":
+        {
+          if (e.target.value) {
+            this.checkPassword(el.fields.password);
+          } else {
+            this.removeInput(e.target);
+          }
+        }
+        break;
+    }
+  },
   eventHandler(el, e) {
     e.preventDefault();
     switch (e.type) {
@@ -124,74 +166,13 @@ const regFrm = {
           this.removeInput(e.target);
           clearTimeout(this.inputTimer);
           this.inputTimer = setTimeout(() => {
-            switch (e.target.name) {
-              case "username":
-                {
-                  if (e.target.value !== "") {
-                    //checks if username meets requiremenets
-                    if (
-                      this.checkLength(
-                        el.fields.username,
-                        this.limits.userMin,
-                        this.limits.userMax
-                      )
-                    ) {
-                      this.checkIfExists(
-                        e,
-                        this.url.user,
-                        e.target.value,
-                        null
-                      );
-                    }
-                  } else {
-                    this.removeInput(e.target);
-                  }
-                }
-                break;
-              case "email":
-                {
-                  if (
-                    e.target.parentElement.querySelectorAll("input")[0].value
-                  ) {
-                    if (this.checkEmail(el.fields.email)) {
-                      this.checkIfExists(
-                        e,
-                        this.url.email,
-                        null,
-                        e.target.value
-                      );
-                    }
-                  } else {
-                    this.removeInput(e.target);
-                  }
-                }
-                break;
-              case "password":
-                {
-                  if (e.target.value) {
-                    this.checkPassword(el.fields.password);
-                  } else {
-                    this.removeInput(e.target);
-                  }
-                }
-                break;
-            }
+            this.eventContent(el, e);
           }, 1000);
         }
         break;
       case "change":
         {
-          switch (e.target.name) {
-            case "password":
-              {
-                if (e.target.value) {
-                  this.checkPassword(el.fields.password);
-                } else {
-                  this.removeInput(e.target);
-                }
-              }
-              break;
-          }
+          this.eventContent(el, e);
         }
         break;
     }
