@@ -218,7 +218,7 @@ const regFrm = {
     ) {
       this.fields.regSubmit.disabled = false;
     } else {
-      this.fields.regSubmit.disabled = false;
+      this.fields.regSubmit.disabled = true;
     }
   },
 };

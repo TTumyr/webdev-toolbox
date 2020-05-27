@@ -1,21 +1,12 @@
 <?php
     if(strpos($_SERVER['REQUEST_URI'], 'login')) {
         if(!isset($_POST['csrf'])) $_POST['csrf'] = '';
-        echo('Form csrf: ' . $_POST['csrf']);
-        echo('<br>');
-        echo('Session csrf: ' . $_SESSION['csrf']);
-        echo('<br><br>');
-        //$logUser = (new UserCtrl)->register();
-        if($_SESSION['csrf'] === $_POST['csrf']) {
-            echo('Form matches session');
-        } else {
-            echo('Form does not match session');
-        }
+        $userLogin = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST);
+        $userLogin->login();
     } elseif (strpos($_SERVER['REQUEST_URI'], 'register')) {
-        $userRegister = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST, $path);
+        $userRegister = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST);
         $userRegister->register();
         if($userRegister->regFail == true) {
-            //print_r($userRegister->insertedUser);
             require(dirname(__DIR__,1) . '/pages/userregfail.php');
         } else {
             require(dirname(__DIR__,1) . '/pages/userregsuccess.php');
