@@ -57,7 +57,6 @@
                 $this->DBQuery->insert($this->db->users['table'], $this->db->users['name'], $this->db->users['email'], $this->db->users['password'], $this->username, $this->email, $this->password);
             } else {
                 echo("an error occurred");
-                print_r($this->errors);
             }
         }
     }
