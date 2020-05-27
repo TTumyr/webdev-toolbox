@@ -1,5 +1,5 @@
 <div class="form-wrapper">
-  <form action="<?= $cfg->rD ?>/register" method="POST" class="form" id="regform">
+  <form action="<?= $path->rD ?>/register" method="POST" class="form" id="regform">
     <h2>Register Form</h2>
     <input type="hidden" name="csrf" id="csrf" value="<?=$csrf?>">
     <div class="form-control">

@@ -30,10 +30,7 @@
             try {
                 $stmt = $this->pdo->prepare($this->sql);
                 $stmt->execute([$username, $email, $password]);
-                echo('User inserted successfully');
-            } catch (Exception $e) {
-                echo "An error occurred";
-                }
+            } catch (Exception $e) {}
         }
         public function querySpecific($fields, $table, $cField = '', $criteria = '') {
             $this->sql = "SELECT " . $fields ." FROM " . $table;

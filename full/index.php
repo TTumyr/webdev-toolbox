@@ -7,24 +7,24 @@ session_name('sid');
 session_start();
 
 //apache rewrite
-switch ($cfg->redirect) {
-    case $cfg->rD . '/'  :
-    case $cfg->rD . ''   :
+switch ($path->redirect) {
+    case $path->rD . '/'  :
+    case $path->rD . ''   :
         $pgID=1;
         require __DIR__ . '/pages/home.php';
         break;
-    case $cfg->rD . '/about'   :
+    case $path->rD . '/about'   :
         $pgID=2;
         require __DIR__ . '/pages/about.php';
         break;
-    case $cfg->rD . '/contact'   :
+    case $path->rD . '/contact'   :
         $pgID=3;
         require __DIR__ . '/pages/contact.php';
         break;
-    case $cfg->rD . '/login'   :
-    case $cfg->rD . '/register'   :
-    case $cfg->rD . '/json/username' :
-    case $cfg->rD . '/json/email' :
+    case $path->rD . '/login'   :
+    case $path->rD . '/register'   :
+    case $path->rD . '/json/username' :
+    case $path->rD . '/json/email' :
         require __DIR__ . '/php/userRequests.php';
         break;
     default:

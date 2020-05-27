@@ -12,8 +12,14 @@
             echo('Form does not match session');
         }
     } elseif (strpos($_SERVER['REQUEST_URI'], 'register')) {
-        $userRegister = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST);
+        $userRegister = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST, $path);
         $userRegister->register();
+        if($userRegister->regFail == true) {
+            //print_r($userRegister->insertedUser);
+            require(dirname(__DIR__,1) . '/pages/userregfail.php');
+        } else {
+            require(dirname(__DIR__,1) . '/pages/userregsuccess.php');
+        }
     } elseif (strpos($_SERVER['REQUEST_URI'], 'json/user')) {
         $file = file_get_contents('php://input');
         $postdata = json_decode(file_get_contents('php://input'), true);

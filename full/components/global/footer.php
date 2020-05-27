@@ -32,7 +32,7 @@
       </div>
     </div>  
     </footer>
-    <script src="<?= $cfg->rD ?>/assets/js/main.js"></script>
-    <script src="<?= $cfg->rD ?>/assets/js/forms.js"></script>
+    <script src="<?= $path->rD ?>/assets/js/main.js"></script>
+    <script src="<?= $path->rD ?>/assets/js/forms.js"></script>
   </body>
 </html>

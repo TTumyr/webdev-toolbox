@@ -13,7 +13,7 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://websiteurl" />
-    <link rel="stylesheet" href="<?= $cfg->rD ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?= $path->rD ?>/assets/css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" /> 
     <link rel="shortcut icon" href="" />

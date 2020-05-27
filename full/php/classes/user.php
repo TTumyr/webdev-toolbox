@@ -17,6 +17,8 @@
             $this->passwordMin = 3;
             $this->passwordMax = 255;
             $this->errors = [];
+            $this->insertedUser = [];
+            $this->regFail = false;
         }
         public function register() {
             $this->auth->check();
@@ -52,11 +54,13 @@
             }       
         }
         private function insertUser() {
+            $this->insertedUser["name"] = $this->username;
+            $this->insertedUser["email"] = $this->email;
             if(empty($this->errors)) {
                 $this->password = password_hash($this->password, PASSWORD_DEFAULT);
                 $this->DBQuery->insert($this->db->users['table'], $this->db->users['name'], $this->db->users['email'], $this->db->users['password'], $this->username, $this->email, $this->password);
             } else {
-                echo("an error occurred");
+                $this->regFail = true;
             }
         }
     }

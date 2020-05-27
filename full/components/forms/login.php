@@ -1,5 +1,5 @@
 <div class="form-wrapper">
-  <form action="<?= $cfg->rD ?>/login" method="POST" class="form" id="logfrm">
+  <form action="<?= $path->rD ?>/login" method="POST" class="form" id="logfrm">
     <h2>Login Form</h2>
     <input type="hidden" name="csrf" id="logcsrf" value="<?=$csrf?>">
     <div class="form-control">
