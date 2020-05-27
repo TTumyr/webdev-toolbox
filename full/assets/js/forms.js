@@ -75,9 +75,9 @@ const regFrm = {
   checkLength(el, min, max) {
     this.removeInput(el);
     if (el.value.length < min) {
-      this.showError(el, `Password must be at least ${min} characters`);
+      this.showError(el, `${el.name} must be at least ${min} characters`);
     } else if (el.value.length > max) {
-      this.showError(el, `Password must be less than ${max} characters`);
+      this.showError(el, `${el.name} must be less than ${max} characters`);
     } else {
       return true;
     }
@@ -137,30 +137,30 @@ const regFrm = {
     }
   },
   eventHandler(el, e) {
-    e.preventDefault();
+    //e.preventDefault();
     switch (e.type) {
-      case "submit":
-        {
-          this.checkLength(
-            this.fields.username,
-            this.limits.userMin,
-            this.limits.userMax
-          );
-          this.checkLength(
-            this.fields.password,
-            this.limits.pwMin,
-            this.limits.pwMax
-          );
-          this.checkEmail(this.fields.email);
-          const registerObject = {
-            csrf: el.fields.csrf.value,
-            username: el.fields.username.value,
-            email: el.fields.email.value,
-            password: el.fields.password.value,
-          };
-          this.registerUser(this.url.register, registerObject);
-        }
-        break;
+      // case "submit":
+      //   {
+      //     this.checkLength(
+      //       this.fields.username,
+      //       this.limits.userMin,
+      //       this.limits.userMax
+      //     );
+      //     this.checkLength(
+      //       this.fields.password,
+      //       this.limits.pwMin,
+      //       this.limits.pwMax
+      //     );
+      //     this.checkEmail(this.fields.email);
+      //     const registerObject = {
+      //       csrf: el.fields.csrf.value,
+      //       username: el.fields.username.value,
+      //       email: el.fields.email.value,
+      //       password: el.fields.password.value,
+      //     };
+      //     this.registerUser(this.url.register, registerObject);
+      //   }
+      //   break;
       case "input":
         {
           this.removeInput(e.target);
@@ -218,7 +218,7 @@ const regFrm = {
     ) {
       this.fields.regSubmit.disabled = false;
     } else {
-      this.fields.regSubmit.disabled = true;
+      this.fields.regSubmit.disabled = false;
     }
   },
 };

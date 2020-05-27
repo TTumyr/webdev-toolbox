@@ -7,7 +7,6 @@ $cfg->getRD();
 
 //get classes
 require(dirname(__DIR__,1) . $cfg->rD . '/php/classes/auth.php');
-require(dirname(__DIR__,1) . $cfg->rD . '/php/classes/validate.php');
 require(dirname(__DIR__,1) . $cfg->rD . '/php/classes/dbquery.php');
-require(dirname(__DIR__,1) . $cfg->rD . '/php/classes/userctrl.php');
+require(dirname(__DIR__,1) . $cfg->rD . '/php/classes/user.php');
 ?>

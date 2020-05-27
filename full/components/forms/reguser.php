@@ -23,6 +23,6 @@
     </div>
     <div class="form-control">
     </div>
-    <button class="submit" id="regsubmit" disabled>Register</button>
+    <button class="submit" id="regsubmit">Register</button>
   </form>
 </div>

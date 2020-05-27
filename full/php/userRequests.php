@@ -5,19 +5,15 @@
         echo('<br>');
         echo('Session csrf: ' . $_SESSION['csrf']);
         echo('<br><br>');
-        $logUser = (new UserCtrl)->init();
+        //$logUser = (new UserCtrl)->register();
         if($_SESSION['csrf'] === $_POST['csrf']) {
             echo('Form matches session');
         } else {
             echo('Form does not match session');
         }
     } elseif (strpos($_SERVER['REQUEST_URI'], 'register')) {
-        $auth = new UserCtrl($cfg->origin, $_SERVER['HTTP_ORIGIN'], $_SESSION['csrf'], $_POST['csrf']);
-        $auth->check();
-        if($auth->verified === true) {
-            $reg = new User_Reg_Validate($db->pdo);
-            $reg->registerUser();
-        }
+        $userRegister = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST);
+        $userRegister->register();
     } elseif (strpos($_SERVER['REQUEST_URI'], 'json/user')) {
         $file = file_get_contents('php://input');
         $postdata = json_decode(file_get_contents('php://input'), true);
