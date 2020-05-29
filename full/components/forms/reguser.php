@@ -1,7 +1,7 @@
 <div class="form-wrapper">
   <form action="<?= $path->rD ?>/register" method="POST" class="form" id="regform">
     <h2>Register Form</h2>
-    <input type="hidden" name="csrf" id="csrf" value="<?=$csrf?>">
+    <input type="hidden" name="csrf" id="csrf" value="<?=$_SESSION['csrf']?>">
     <div class="form-control">
       <label for="username">Username</label>
       <input type="text" name="username" id="username" autocomplete="off" />
@@ -23,6 +23,6 @@
     </div>
     <div class="form-control">
     </div>
-    <button class="submit" id="regsubmit" disabled>Register</button>
+    <button class="submit" id="regsubmit">Register</button>
   </form>
 </div>

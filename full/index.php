@@ -1,10 +1,13 @@
 <?php
 
-require('php/sitesetup.php');
-
 //set up session
 session_name('sid');
 session_start();
+if(!isset($_COOKIE['sid'])) {
+    $_SESSION['auth'] = false;
+}
+
+require('php/sitesetup.php');
 
 //apache rewrite
 switch ($path->redirect) {

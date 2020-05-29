@@ -3,6 +3,8 @@
         if(!isset($_POST['csrf'])) $_POST['csrf'] = '';
         $userLogin = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST);
         $userLogin->login();
+        print_r($_SESSION['csrf'] . "<br/>" . $_POST['csrf']);
+        //header("Location: http://localhost/");
     } elseif (strpos($_SERVER['REQUEST_URI'], 'register')) {
         $userRegister = new User($_SERVER['HTTP_ORIGIN'], $_SESSION, $_POST);
         $userRegister->register();

@@ -21,7 +21,7 @@
               <li class="<?= $pgID === 3 ? 'active' : '' ?>">
                 <a href="/admin">Admin</a>
               </li>
-                <button><a href="/login">Login</a></button>
+              <?php if($_SESSION['auth'] == false) { echo('<button><a href="/login">Login</a></button>'); } else if($_SESSION['auth'] == true) { echo('<div><p>Logged in</p></div'); }?>
             </ul>
           </div>
         </nav>

@@ -1,7 +1,7 @@
 <div class="form-wrapper">
   <form action="<?= $path->rD ?>/login" method="POST" class="form" id="logfrm">
     <h2>Login Form</h2>
-    <input type="hidden" name="csrf" id="logcsrf" value="<?=$csrf?>">
+    <input type="hidden" name="csrf" id="logcsrf" value="<?=$_SESSION['csrf']?>">
     <div class="form-control">
       <label for="username">Username</label>
       <input type="text" name="username" id="loguser" />

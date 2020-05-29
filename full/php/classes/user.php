@@ -38,6 +38,8 @@
             if($this->auth->verified) {
                 $this->formValidCheck();
                 $this->insertUser();
+            } else {
+                $this->regFail = true;
             }
         }
         private function loginUser() {
