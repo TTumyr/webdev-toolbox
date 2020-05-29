@@ -5,6 +5,7 @@ session_name('sid');
 session_start();
 if(!isset($_COOKIE['sid'])) {
     $_SESSION['auth'] = false;
+    $_SESSION['admin'] = false;
 }
 
 require('php/sitesetup.php');
@@ -23,6 +24,10 @@ switch ($path->redirect) {
     case $path->rD . '/contact'   :
         $pgID=3;
         require __DIR__ . '/pages/contact.php';
+        break;
+    case $path->rD . '/admin'   :
+        $pgID=4;
+        require __DIR__ . '/pages/admin.php';
         break;
     case $path->rD . '/login'   :
     case $path->rD . '/register'   :

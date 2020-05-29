@@ -1,0 +1,27 @@
+.userLoginMenu {
+  margin-left: 2rem;
+  position: relative;
+  cursor: pointer;
+}
+.userLoginMenu img {
+  border-radius: 50%;
+}
+.userLoginMenu__menu {
+  padding: 1rem 0;
+  border-radius: 4px;
+  position: absolute;
+  right: 0;
+  color: var(--text-dark);
+  background: var(--main-back);
+  border: 1px solid var(--frm-border-fcs);
+  display: none;
+}
+.userLoginMenu__menu a {
+  padding: 0 2rem;
+}
+.userLoginMenu__menu a:hover {
+  color: var(
+    --text-light
+  ) !important; /* this is loaded before .header a -- change order */
+  background: var(--frm-border-fcs);
+}

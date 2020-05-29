@@ -223,4 +223,4 @@ const regFrm = {
   },
 };
 
-regFrm.init();
+document.getElementById("regform") && regFrm.init();
