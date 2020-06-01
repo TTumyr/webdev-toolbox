@@ -177,11 +177,22 @@ body {
   padding-left: 1rem;
 }
 @media only screen and (max-width: 768px) {
+  .navbar {
+    position: relative;
+  }
   .navbar__icon-wrapper {
+    top: -2.4rem;
+    right: 2rem;
+    position: absolute;
     display: block;
   }
   .navbar__menu {
+    top: 2rem;
+    right: 2rem;
+    position: absolute;
     display: none;
+    background: darkblue;
+    z-index: 990;
   }
   .navbar__menu ul {
     flex-direction: column;

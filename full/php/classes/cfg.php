@@ -27,7 +27,7 @@
         public function __construct() {
             //Users table properties, must match equivalent mySQL database properties
             $this->pdo = new PDO('mysql:host=localhost;dbname=wdtools', 'root', '');
-            $this->users = ['table' => 'users', 'id' => 'id', 'name' => 'name', 'password' => 'password', 'email' => 'email'];
+            $this->users = ['table' => 'users', 'id' => 'id', 'username' => 'username', 'password' => 'password', 'email' => 'email'];
             $this->sql = '';
         }
         public function querySpecific($field, $table, $cField = '', $criteria = '') {

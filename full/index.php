@@ -3,10 +3,6 @@
 //set up session
 session_name('sid');
 session_start();
-if(!isset($_COOKIE['sid'])) {
-    $_SESSION['auth'] = false;
-    $_SESSION['admin'] = false;
-}
 
 require('php/sitesetup.php');
 
@@ -28,6 +24,17 @@ switch ($path->redirect) {
     case $path->rD . '/admin'   :
         $pgID=4;
         require __DIR__ . '/pages/admin.php';
+        break;
+    case $path->rD . '/account'   :
+        $pgID=5;
+        require __DIR__ . '/pages/useraccount.php';
+        break;
+    case $path->rD . '/logout'   :
+        //temporary logout with session destroy
+        setcookie (session_id(), "", time() - 3600);
+        session_destroy();
+        session_write_close();
+        header("Location: http://localhost/");
         break;
     case $path->rD . '/login'   :
     case $path->rD . '/register'   :

@@ -31,7 +31,6 @@ const userMini = {
   btn: document.getElementById("userMini"),
   menu: document.getElementById("userMini__menu"),
   btnClick() {
-    console.log("clicked");
     if (this.menu.style.display === "none" || this.menu.style.display === "") {
       this.menu.style.display = "block";
     } else {

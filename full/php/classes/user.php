@@ -43,14 +43,13 @@
             }
         }
         private function loginUser() {
-            $this->DBQuery->querySpecific("*", $this->db->users['table'], $this->db->users['name'], $_POST['username']);
+            $this->DBQuery->querySpecific("*", $this->db->users['table'], $this->db->users['username'], $_POST['username']);
             $this->DBQuery->get($this->DBQuery->sql);
             if(password_verify($_POST['password'], $this->DBQuery->data[0]['password'])) {
                 $this->loginAuth = true;
-                ($this->DBQuery->data[0]['level'] >=  $this->adminLevel) ? $_SESSION['admin'] = true :  $_SESSION['admin'] = false;
                 $_SESSION['auth'] = true;
-                $_SESSION['username'] = $this->DBQuery->data[0]['name'];
-                $_SESSION['email'] = $this->DBQuery->data[0]['email'];
+                $_SESSION['userdata'] =  $this->DBQuery->data;
+                ($this->DBQuery->data[0]['userlevel'] >=  $this->adminLevel) ? $_SESSION['admin'] = true :  $_SESSION['admin'] = false;
             }
         }
         private function formValidCheck() {
@@ -67,7 +66,7 @@
                 $this->errors['passwordError'] = "Password must be minimum " . $this->passwordMin . " characters long";
             }
             if(empty($this->errors)) {
-                $this->DBQuery->querySpecific($this->db->users['name'], $this->db->users['table'], $this->db->users['name'], $_POST['username']);
+                $this->DBQuery->querySpecific($this->db->users['name'], $this->db->users['table'], $this->db->users['username'], $_POST['username']);
                 $this->DBQuery->get($this->DBQuery->sql);
                 if(!empty($this->DBQuery->data)) {
                     $this->errors['nameError'] = "Username already taken";
@@ -82,11 +81,11 @@
             }       
         }
         private function insertUser() {
-            $this->insertedUser["name"] = $this->username;
+            $this->insertedUser["username"] = $this->username;
             $this->insertedUser["email"] = $this->email;
             if(empty($this->errors)) {
                 $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-                $this->DBQuery->insert($this->db->users['table'], $this->db->users['name'], $this->db->users['email'], $this->db->users['password'], $this->username, $this->email, $this->password);
+                $this->DBQuery->insert($this->db->users['table'], $this->db->users['username'], $this->db->users['email'], $this->db->users['password'], $this->username, $this->email, $this->password);
             } else {
                 $this->regFail = true;
             }

@@ -25,3 +25,8 @@
   ) !important; /* this is loaded before .header a -- change order */
   background: var(--frm-border-fcs);
 }
+@media only screen and (max-width: 768px) {
+  .userLoginMenu {
+    z-index: 995;
+  }
+}
