@@ -1,6 +1,7 @@
-/full/test
-/full/assets/fontawesome
-/full/assets/img
+/phpfull/test
+/phpfull/assets/fontawesome
+/phpfull/assets/img
 /resources
 /test
+*test*
 *_old*

@@ -48,10 +48,14 @@
         }
         public function checkStatus() {
             $this->auth->check();
-            $key = array_keys($this->post);
-            $this->DBQuery->querySpecific($this->db->users[$key[1]], $this->db->users['table'], $this->db->users[$key[1]], $this->post[$key[1]]);
-            $this->DBQuery->get($this->DBQuery->sql);
-            echo(json_encode($this->DBQuery->data));
+            if($this->auth->verified) {
+                $key = array_keys($this->post);
+                $this->DBQuery->querySpecific($this->db->users[$key[1]], $this->db->users['table'], $this->db->users[$key[1]], $this->post[$key[1]]);
+                $this->DBQuery->get($this->DBQuery->sql);
+                 echo(json_encode($this->DBQuery->data));
+            }  else {
+                $this->regFail = true;
+            }
         }
         private function loginUser() {
             $this->DBQuery->querySpecific("*", $this->db->users['table'], $this->db->users['username'], $_POST['username']);

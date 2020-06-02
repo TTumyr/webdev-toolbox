@@ -34,7 +34,7 @@
         }
         public function querySpecific($fields, $table, $cField = '', $criteria = '') {
             $this->sql = "SELECT " . $fields ." FROM " . $table;
-            $criteria !== '' ? $this->sql .= " WHERE " . $cField . " LIKE '" . $criteria . "'": "";
+            $criteria !== '' ? $this->sql .= " WHERE LOWER(" . $cField . ") LIKE LOWER('" . $criteria . "')": "";
         }
     }
  ?>

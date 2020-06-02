@@ -61,7 +61,7 @@ const regFrm = {
         if (
           resData.length !== 0 &&
           resData !== undefined &&
-          e.target.value === resData[0][formField]
+          e.target.value.toLowerCase() === resData[0][formField].toLowerCase()
         ) {
           this.showError(
             e.target,
