@@ -9,8 +9,8 @@ const regFrm = {
     regSubmit: document.getElementById("regsubmit"),
   },
   url: {
-    user: "http://localhost/json/username",
-    email: "http://localhost/json/email",
+    user: "http://localhost/json/client/validate",
+    email: "http://localhost/json/client/validate",
     register: "http://localhost/register",
   },
   limits: {
@@ -46,7 +46,7 @@ const regFrm = {
     };
     if (username) fetchObject["username"] = username;
     if (email) fetchObject["email"] = email;
-    if (username) formField = "name";
+    if (username) formField = "username";
     if (email) formField = "email";
 
     fetch(fetchUrl, {

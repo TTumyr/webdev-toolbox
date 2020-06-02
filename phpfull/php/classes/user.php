@@ -1,20 +1,24 @@
 <?php
     class User {
         public function __construct($origin, $session, $post) {
-            $this->json = json_decode(file_get_contents('php://input'), true);
+            if(gettype($post) == 'string') $post = (array) json_decode($post, true);
             $this->cfg = new Cfg();
             $this->origin = $origin;
             $this->session = $session;
             $this->post = $post;
-            $this->username = trim($post['username']);
+            if(isset($post['username'])) {
+                $this->email = trim($post['username']);
+            }
             if(isset($post['email'])) {
                 $this->email = trim($post['email']);
             }
-            $this->password = $post['password'];
-            if(!isset($this->session["csrf"])) {
-                $this->session["csrf"] = '';
+            if(isset($post['password'])) {
+                $this->password = $post['password'];
             }
-            $this->auth = new Auth($this->cfg->origin, $this->origin, $this->session["csrf"], $this->post["csrf"]);
+            if(!isset($this->session['csrf'])) {
+                $this->session['csrf'] = '';
+            }
+            $this->auth = new Auth($this->cfg->origin, $this->origin, $this->session['csrf'], $this->post['csrf']);
             $this->db = new mySQL();
             $this->DBQuery = new DBQuery($this->db->pdo);
             $this->usernameMin = 3;
@@ -41,6 +45,13 @@
             } else {
                 $this->regFail = true;
             }
+        }
+        public function checkStatus() {
+            $this->auth->check();
+            $key = array_keys($this->post);
+            $this->DBQuery->querySpecific($this->db->users[$key[1]], $this->db->users['table'], $this->db->users[$key[1]], $this->post[$key[1]]);
+            $this->DBQuery->get($this->DBQuery->sql);
+            echo(json_encode($this->DBQuery->data));
         }
         private function loginUser() {
             $this->DBQuery->querySpecific("*", $this->db->users['table'], $this->db->users['username'], $_POST['username']);
@@ -81,8 +92,8 @@
             }       
         }
         private function insertUser() {
-            $this->insertedUser["username"] = $this->username;
-            $this->insertedUser["email"] = $this->email;
+            $this->insertedUser['username'] = $this->username;
+            $this->insertedUser['email'] = $this->email;
             if(empty($this->errors)) {
                 $this->password = password_hash($this->password, PASSWORD_DEFAULT);
                 $this->DBQuery->insert($this->db->users['table'], $this->db->users['username'], $this->db->users['email'], $this->db->users['password'], $this->username, $this->email, $this->password);

@@ -38,8 +38,7 @@ switch ($path->redirect) {
         break;
     case $path->rD . '/login'   :
     case $path->rD . '/register'   :
-    case $path->rD . '/json/username' :
-    case $path->rD . '/json/email' :
+    case $path->rD . '/json/client/validate' :
         require __DIR__ . '/php/userRequests.php';
         break;
     default:
